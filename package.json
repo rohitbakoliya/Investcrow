@@ -83,7 +83,6 @@
     "node": ">=10"
   },
   "dependencies": {
-    "@material-ui/core": "^4.11.3",
     "@sendgrid/mail": "^7.4.2",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
