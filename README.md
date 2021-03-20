@@ -2,7 +2,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/rohitbakoliya/investcrow">
-    <img src="assets/logo.png" alt="Logo" width="80" height="80">
+    <img src="assets/logo.jpeg" alt="Logo" height="100" >
   </a>
 
   <h3 align="center">We Build Trust!</h3>
