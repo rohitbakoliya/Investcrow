@@ -7,12 +7,15 @@ import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import MainContract from 'config/MainContract';
 import web3 from 'config/web3';
+import Loading from '@ico-ui/Loading';
+import styled from 'styled-components';
 
 const AgreementSchema = yup.object().shape({
   investorAddress: yup.string().required().trim(),
   moneyPromised: yup.string().min(1).required(),
   tokenPromised: yup.string().min(1).required(),
 });
+
 interface Agreement {
   investorAddress: string;
   moneyPromised: number;
@@ -23,8 +26,26 @@ interface Props {
   token: string;
 }
 
+const LoadingWrapper = styled.div`
+  Loading,
+  p {
+    text-align: center;
+    margin-right: 10px;
+  }
+  .loading {
+    display: flex;
+  }
+  .half-circle-spinner {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    position: relative;
+  }
+`;
+
 const AgreementForm: React.FC<Props> = ({ address: companyAddress, token: tokenAddress }) => {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -37,6 +58,7 @@ const AgreementForm: React.FC<Props> = ({ address: companyAddress, token: tokenA
   const onSubmit = async (data: Agreement) => {
     try {
       const accounts = await web3.eth.getAccounts();
+      setLoading(true);
       await MainContract.methods
         .makeAgreement(
           data.investorAddress,
@@ -51,11 +73,24 @@ const AgreementForm: React.FC<Props> = ({ address: companyAddress, token: tokenA
         .call();
       console.log(k);
       setOpen(false);
+      setLoading(false);
     } catch (err) {
       console.log(err);
       setOpen(false);
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return (
+      <LoadingWrapper>
+        <div className='loading'>
+          <p>Processing Agreement... </p>
+          <Loading varient='secondary' />
+        </div>
+      </LoadingWrapper>
+    );
+  }
 
   return (
     <>

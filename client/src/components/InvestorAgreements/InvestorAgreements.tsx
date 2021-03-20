@@ -16,6 +16,7 @@ import toast from 'react-hot-toast';
 import web3 from 'config/web3';
 import FontAwesome from 'react-fontawesome';
 import styled from 'styled-components';
+import Loading from '@ico-ui/Loading';
 
 interface Props {
   agreements: Array<any>;
@@ -29,6 +30,12 @@ const StyledButtonsGrp = styled.div`
     font-size: 20px;
     cursor: pointer;
   }
+  .half-circle-spinner {
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    position: relative;
+  }
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,41 +44,53 @@ const StyledButtonsGrp = styled.div`
 const StatusComponet: React.FC<SProps> = ({ agreement }) => {
   const [loading, setLoading] = useState(true);
   const [statusIcon, setStatusIcon] = useState<null | JSX.Element>(null);
+  const [loading1, setLoading1] = useState(false);
 
   const transferMoney = async (agreement: any) => {
     try {
+      setLoading1(true);
       await MainContract.methods.depositMoney().send({
         from: agreement.investor,
         value: agreement.moneyRequired,
       });
       setStatusIcon(null);
+      setLoading1(false);
       toast.success(`Approved and money transferred to contract`);
     } catch (err) {
+      setLoading1(false);
       console.log(err);
-      toast.error(`something went wrong`);
+      toast.error(`Transferring money failed`);
     }
   };
   const handleApprove = async () => {
     try {
+      setLoading1(true);
       const [account] = await web3.eth.getAccounts();
       await MainContract.methods
         .approveAgreement(agreement.investor, agreement.company)
         .send({ from: account });
       await transferMoney(agreement);
+      setLoading1(false);
     } catch (err) {
-      toast.error('something went wrong');
+      console.log(err);
+      setLoading1(false);
+      toast.error('Approving agreement failed!!');
     }
   };
   const handleReject = async () => {
     try {
+      setLoading1(true);
       const [account] = await web3.eth.getAccounts();
       await MainContract.methods
         .rejectAgreement(agreement.investor, agreement.company)
         .send({ from: account });
       setStatusIcon(null);
+      setLoading1(false);
       toast.success(`Approval rejected`);
     } catch (err) {
-      toast.error('something went wrong');
+      console.log(err);
+      setLoading1(false);
+      toast.error('Rejecting agreement failed');
     }
   };
 
@@ -110,18 +129,23 @@ const StatusComponet: React.FC<SProps> = ({ agreement }) => {
           default:
             break;
         }
-        setLoading(false);
       } catch (err) {
-        toast.error('something went wrong');
-        setLoading(false);
+        console.log(err);
+        toast.error('Fetching agreement status failed');
       }
     };
+    setLoading(true);
     fetchStatus();
+    setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusIcon]);
 
-  if (loading) {
-    return <div></div>;
+  if (loading || loading1) {
+    return (
+      <StyledButtonsGrp>
+        <Loading varient='secondary' />
+      </StyledButtonsGrp>
+    );
   }
   return statusIcon;
 };
