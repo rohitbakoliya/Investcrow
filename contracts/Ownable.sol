@@ -3,8 +3,7 @@ pragma solidity ^0.8.2;
 
 contract Ownable {
     address public owner;
-
-
+    
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
     constructor()  {

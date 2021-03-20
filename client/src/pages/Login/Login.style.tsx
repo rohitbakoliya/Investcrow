@@ -32,6 +32,10 @@ const LoginWrapper = styled.div`
     margin: 30px 5px 0 5px;
     text-align: center;
   }
+  .logo {
+    min-width: 100px;
+    margin: 15px 0;
+  }
 `;
 
 export default LoginWrapper;
