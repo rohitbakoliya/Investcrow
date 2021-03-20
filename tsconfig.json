@@ -7,7 +7,6 @@
     "strict": true,
     "moduleResolution": "node",
     "outDir": "dist",
-    "rootDir": "server",
     "allowJs": true,
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
