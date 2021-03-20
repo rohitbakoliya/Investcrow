@@ -4,31 +4,32 @@ import * as yup from 'yup';
 import { Input } from '@ico-ui/Form';
 import { Button, Flex } from '@ico-ui';
 import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MainContract from 'config/MainContract';
 import web3 from 'config/web3';
 
 const AgreementSchema = yup.object().shape({
   investorAddress: yup.string().required().trim(),
-  companyAddress: yup.string().required().trim(),
-  tokenAddress: yup.string().required().trim(),
   moneyPromised: yup.string().min(1).required(),
   tokenPromised: yup.string().min(1).required(),
 });
 interface Agreement {
   investorAddress: string;
-  companyAddress: string;
-  tokenAddress: string;
   moneyPromised: number;
   tokenPromised: number;
 }
+interface Props {
+  address: string;
+  token: string;
+}
 
-const AgreementForm: React.FC = () => {
+const AgreementForm: React.FC<Props> = ({ address: companyAddress, token: tokenAddress }) => {
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
   };
-
+  console.log('Inside agg', companyAddress);
+  console.log('token', tokenAddress);
   const { register, handleSubmit, errors } = useForm<Agreement>({
     mode: 'onChange',
     resolver: yupResolver(AgreementSchema),
@@ -39,14 +40,14 @@ const AgreementForm: React.FC = () => {
       await MainContract.methods
         .makeAgreement(
           data.investorAddress,
-          data.companyAddress,
+          companyAddress,
           data.moneyPromised,
           data.tokenPromised,
-          data.tokenAddress
+          tokenAddress
         )
         .send({ from: accounts[0] });
       const k = await MainContract.methods
-        .getAgreement(data.investorAddress, data.companyAddress)
+        .getAgreement(data.investorAddress, companyAddress)
         .call();
       console.log(k);
       setOpen(false);
@@ -69,20 +70,6 @@ const AgreementForm: React.FC = () => {
               type='text'
               name='investorAddress'
               placeholder='Investor Account Address'
-              inputRef={register}
-              errors={errors}
-            />
-            <Input
-              type='text'
-              name='companyAddress'
-              placeholder='Company Address'
-              inputRef={register}
-              errors={errors}
-            />
-            <Input
-              type='text'
-              name='tokenAddress'
-              placeholder='Token Address'
               inputRef={register}
               errors={errors}
             />

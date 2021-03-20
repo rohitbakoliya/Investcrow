@@ -1,35 +1,7 @@
 import web3 from './web3';
 
-const address = '0x93FBC556f9c356372b79a4Fe3a24c91439037454';
+const address = '0x541c649AcF9140F6C4CEabdCC369a0c223948911';
 const abi = [
-  {
-    inputs: [],
-    stateMutability: 'nonpayable',
-    type: 'constructor',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'previousOwner',
-        type: 'address',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'newOwner',
-        type: 'address',
-      },
-    ],
-    name: 'OwnershipTransferred',
-    type: 'event',
-  },
-  {
-    stateMutability: 'payable',
-    type: 'fallback',
-  },
   {
     inputs: [
       {
@@ -113,6 +85,125 @@ const abi = [
     outputs: [],
     stateMutability: 'payable',
     type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address payable',
+        name: 'investor_',
+        type: 'address',
+      },
+      {
+        internalType: 'address payable',
+        name: 'company_',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'moneyRequired_',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'tokensRequired_',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: 'token_',
+        type: 'address',
+      },
+    ],
+    name: 'makeAgreement',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'newOwner',
+        type: 'address',
+      },
+    ],
+    name: 'transferOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'previousOwner',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'newOwner',
+        type: 'address',
+      },
+    ],
+    name: 'OwnershipTransferred',
+    type: 'event',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address payable',
+        name: 'investor_',
+        type: 'address',
+      },
+      {
+        internalType: 'address payable',
+        name: 'company_',
+        type: 'address',
+      },
+    ],
+    name: 'rejectAgreement',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address payable',
+        name: 'investor_',
+        type: 'address',
+      },
+      {
+        internalType: 'address payable',
+        name: 'company_',
+        type: 'address',
+      },
+      {
+        internalType: 'uint8',
+        name: 'status_',
+        type: 'uint8',
+      },
+    ],
+    name: 'setStatus',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    stateMutability: 'payable',
+    type: 'fallback',
+  },
+  {
+    stateMutability: 'payable',
+    type: 'receive',
   },
   {
     inputs: [
@@ -376,39 +467,6 @@ const abi = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address payable',
-        name: 'investor_',
-        type: 'address',
-      },
-      {
-        internalType: 'address payable',
-        name: 'company_',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: 'moneyRequired_',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'tokensRequired_',
-        type: 'uint256',
-      },
-      {
-        internalType: 'address',
-        name: 'token_',
-        type: 'address',
-      },
-    ],
-    name: 'makeAgreement',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [],
     name: 'manager',
     outputs: [
@@ -437,47 +495,6 @@ const abi = [
   {
     inputs: [
       {
-        internalType: 'address payable',
-        name: 'investor_',
-        type: 'address',
-      },
-      {
-        internalType: 'address payable',
-        name: 'company_',
-        type: 'address',
-      },
-    ],
-    name: 'rejectAgreement',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address payable',
-        name: 'investor_',
-        type: 'address',
-      },
-      {
-        internalType: 'address payable',
-        name: 'company_',
-        type: 'address',
-      },
-      {
-        internalType: 'uint8',
-        name: 'status_',
-        type: 'uint8',
-      },
-    ],
-    name: 'setStatus',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'address',
         name: 'token',
         type: 'address',
@@ -498,23 +515,6 @@ const abi = [
     ],
     stateMutability: 'view',
     type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'newOwner',
-        type: 'address',
-      },
-    ],
-    name: 'transferOwnership',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    stateMutability: 'payable',
-    type: 'receive',
   },
 ];
 export default new web3.eth.Contract(abi, address);

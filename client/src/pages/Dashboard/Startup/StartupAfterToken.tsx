@@ -5,6 +5,7 @@ import web3 from 'config/web3';
 import AllAgreements from 'components/StartupAgreements/AllAgreements';
 import styled from 'styled-components';
 import { Flex } from '@ico-ui';
+import toast from 'react-hot-toast';
 
 interface Props {
   token: string;
@@ -25,23 +26,40 @@ const StyledSAD = styled.div`
 const StartupAfterToken: React.FC<Props> = ({ token }) => {
   const [tokenInfo, setTokenInfo] = useState([]);
   const [agreements, setAgreements] = useState([]);
+  const [address, setAddress] = useState<string>('');
   useEffect(() => {
     const getInfo = async () => {
-      const accounts = await web3.eth.getAccounts();
-      console.log(accounts[0]);
-      const info = await MainContract.methods.infoToken(token).call();
-      const _agreements = await MainContract.methods.getAgreements(accounts[0]).call();
-      setAgreements(_agreements);
-      setTokenInfo(info);
+      try {
+        const accounts = await web3.eth.getAccounts();
+        console.log(' This is address', accounts[0]);
+        setAddress(accounts[0]);
+        const info = await MainContract.methods.infoToken(token).call();
+        const _agreements = await MainContract.methods.getAgreements(accounts[0]).call();
+        setAgreements(_agreements);
+        setTokenInfo(info);
+      } catch (err) {
+        toast.error('Something went wrong while creating new token');
+      }
     };
     getInfo();
   }, [token]);
+  useEffect(() => {
+    const getAddress = async () => {
+      try {
+        const accounts = await web3.eth.getAccounts();
+        setAddress(accounts[0]);
+      } catch (err) {
+        toast.error('Something went wrong while creating new token');
+      }
+    };
+    getAddress();
+  }, [address]);
 
   return (
     <StyledSAD>
       <Flex justify='space-between' align='center'>
         <h2>Address: {token}</h2>
-        <AgreementForm />
+        <AgreementForm address={address} token={token} />
       </Flex>
       <Flex className='account__details color--gray' justify='space-between' align='center'>
         <p>Name: {tokenInfo && tokenInfo[0]}</p>
