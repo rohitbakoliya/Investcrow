@@ -2,21 +2,26 @@ import styled from 'styled-components';
 import { Flex } from '@ico-ui';
 
 const HomeWrapper = styled(Flex)`
-  min-height: 100vh;
+  position: relative;
   .home__left {
+    min-height: 100vh;
     flex-basis: 450px;
-    padding-top: 200px;
+    position: relative;
+    top: 0;
+    bottom: 0;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: ${p => p.theme.colors.primary};
-    /* background-image: radial-gradient(circle at 0% 0%, #373b52, #252736 51%, #1d1e26); */
     color: ${p => p.theme.colors.white};
     .home__text {
-      margin-left: 80px;
+      margin-left: -50px;
       z-index: 1;
     }
   }
-  .app--logo {
-    margin-bottom: 20px;
-    font-size: 44px;
+  h1 {
+    font-size: 2rem;
   }
   .home__right {
     flex: 1;
@@ -24,6 +29,7 @@ const HomeWrapper = styled(Flex)`
   @media screen and (${p => p.theme.media.tablet}) {
     flex-direction: column;
     .home__left {
+      min-height: 45vh;
       flex-basis: 45vh;
     }
   }

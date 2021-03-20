@@ -83,7 +83,6 @@
     "node": ">=10"
   },
   "dependencies": {
-    "@material-ui/core": "^4.11.3",
     "@sendgrid/mail": "^7.4.2",
     "@truffle/hdwallet-provider": "^1.2.4",
     "axios": "^0.21.1",
