@@ -1,8 +1,8 @@
 const Web3 = require('web3');
-const compiledMainContract = require('./client/src/ethutils/MainContract.json');
+const compiledMainContract = require('../client/src/ethutils/MainContract.json');
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 const dotenv = require('dotenv');
-dotenv.config({ path: './.env' });
+dotenv.config({ path: '../.env' });
 const fs = require('fs-extra');
 const path = require('path');
 

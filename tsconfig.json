@@ -12,5 +12,5 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["client", "node_modules", "dist", "build"]
+  "exclude": ["client", "node_modules", "dist", "build", "scripts"]
 }
