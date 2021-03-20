@@ -133,3 +133,6 @@ build
 
 # todo lists
 *todo*
+
+# package-lock.json
+package-lock.json
