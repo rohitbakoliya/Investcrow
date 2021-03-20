@@ -17,6 +17,7 @@ import web3 from 'config/web3';
 import FontAwesome from 'react-fontawesome';
 import styled from 'styled-components';
 import Loading from '@ico-ui/Loading';
+import { Link } from 'react-router-dom';
 
 interface Props {
   agreements: Array<any>;
@@ -157,7 +158,6 @@ const AllAgreements: React.FC<Props> = ({ agreements }) => {
         <Table aria-label='simple table'>
           <TableHead>
             <TableRow>
-              <TableCell align='center'>Inv. Address</TableCell>
               <TableCell align='center'>Company Address</TableCell>
               <TableCell align='center'>Money Requested</TableCell>
               <TableCell align='center'>Tokens to be Transfered</TableCell>
@@ -167,8 +167,9 @@ const AllAgreements: React.FC<Props> = ({ agreements }) => {
           <TableBody>
             {agreements.map(agreement => (
               <TableRow key={Math.random()}>
-                <TableCell>{agreement.investor}</TableCell>
-                <TableCell align='center'>{agreement.company}</TableCell>
+                <TableCell align='center'>
+                  <Link to={`/profile/${agreement.company}`}>{agreement.company}</Link>
+                </TableCell>
                 <TableCell align='center'>{agreement.moneyRequired}</TableCell>
                 <TableCell align='center'>{agreement.tokensRequired}</TableCell>
                 <TableCell align='center'>{<StatusComponet agreement={agreement} />}</TableCell>

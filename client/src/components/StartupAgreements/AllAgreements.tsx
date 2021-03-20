@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '@ico-ui';
 import toast from 'react-hot-toast';
 import web3 from 'config/web3';
+import { Link } from 'react-router-dom';
 
 interface Props {
   agreements: Array<any>;
@@ -98,7 +99,6 @@ const AllAgreements: React.FC<Props> = ({ agreements }) => {
           <TableHead>
             <TableRow>
               <TableCell align='center'>Inv. Address</TableCell>
-              <TableCell align='center'>Company Address</TableCell>
               <TableCell align='center'>Money Requested</TableCell>
               <TableCell align='center'>Tokens to be Transfered</TableCell>
               <TableCell align='center'>Status</TableCell>
@@ -107,8 +107,9 @@ const AllAgreements: React.FC<Props> = ({ agreements }) => {
           <TableBody>
             {agreements.map(agreement => (
               <TableRow key={Math.random()}>
-                <TableCell>{agreement.investor}</TableCell>
-                <TableCell align='center'>{agreement.company}</TableCell>
+                <TableCell>
+                  <Link to={`/profile/${agreement.investor}`}>{agreement.investor}</Link>
+                </TableCell>
                 <TableCell align='center'>{agreement.moneyRequired}</TableCell>
                 <TableCell align='center'>{agreement.tokensRequired}</TableCell>
                 <TableCell align='center'>{<StatusComponet agreement={agreement} />}</TableCell>

@@ -17,6 +17,9 @@ import web3 from 'config/web3';
 import FontAwesome from 'react-fontawesome';
 import styled from 'styled-components';
 import Loading from '@ico-ui/Loading';
+import { useSelector } from 'react-redux';
+import { StoreState } from 'store';
+import { Link } from 'react-router-dom';
 
 interface Props {}
 interface SProps {
@@ -69,7 +72,10 @@ const StatusComponet: React.FC<SProps> = ({ agreement }) => {
 
 const UserAgreements: React.FC<Props> = () => {
   const [agreements, setAgreements] = useState<Array<any>>([]);
+  const userVal = useSelector((state: StoreState) => state.auth.user?.userType);
   const [loading, setLoading] = useState(true);
+  let userType = 'startup';
+  if (userVal !== undefined) userType = userVal[0];
   useEffect(() => {
     const getAgreements = async () => {
       const [account] = await web3.eth.getAccounts();
@@ -95,8 +101,8 @@ const UserAgreements: React.FC<Props> = () => {
         <Table aria-label='simple table'>
           <TableHead>
             <TableRow>
-              <TableCell align='center'>Inv. Address</TableCell>
-              <TableCell align='center'>Company Address</TableCell>
+              {userType === 'startup' && <TableCell align='center'>Inv. Address</TableCell>}
+              {userType === 'investor' && <TableCell align='center'>Company Address</TableCell>}
               <TableCell align='center'>Money Requested</TableCell>
               <TableCell align='center'>Tokens to be Transfered</TableCell>
               <TableCell align='center'>Status</TableCell>
@@ -105,8 +111,16 @@ const UserAgreements: React.FC<Props> = () => {
           <TableBody>
             {agreements.map(agreement => (
               <TableRow key={Math.random()}>
-                <TableCell>{agreement.investor}</TableCell>
-                <TableCell align='center'>{agreement.company}</TableCell>
+                {userType === 'startup' && (
+                  <TableCell>
+                    <Link to={`/profile/${agreement.investor}`}>{agreement.investor}</Link>
+                  </TableCell>
+                )}
+                {userType === 'investor' && (
+                  <TableCell>
+                    <Link to={`/profile/${agreement.company}`}>{agreement.company}</Link>
+                  </TableCell>
+                )}
                 <TableCell align='center'>{agreement.moneyRequired}</TableCell>
                 <TableCell align='center'>{agreement.tokensRequired}</TableCell>
                 <TableCell align='center'>{<StatusComponet agreement={agreement} />}</TableCell>

@@ -24,7 +24,7 @@ const Profiles: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   useEffect(() => {
-    const fetchAllUser = async () => {
+    const fetchUsers = async () => {
       try {
         const { data } = await axios.get('/api/user/all');
         const _users = data.users;
@@ -34,7 +34,7 @@ const Profiles: React.FC = () => {
         setError(`something went wrong`);
       }
     };
-    fetchAllUser();
+    fetchUsers();
   }, []);
   const renderProfiles = () => {
     if (loading) return <Loading varient='secondary' />;
