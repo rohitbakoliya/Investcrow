@@ -34,7 +34,7 @@ const Login: React.FC = () => {
   return (
     <LoginWrapper>
       <Flex direction='column' align='center' justify='center'>
-        <AppLogo width='50px' />
+        <AppLogo width='150px' />
         <h2 className='text--bold'>Hello, Welcome back!</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input
