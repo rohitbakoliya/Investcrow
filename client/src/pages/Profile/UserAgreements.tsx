@@ -16,6 +16,7 @@ import styled from 'styled-components';
 import Loading from '@ico-ui/Loading';
 import { Link } from 'react-router-dom';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { SyTooltip } from '@ico-ui';
 
 interface Props {
   user: any;
@@ -119,15 +120,17 @@ const UserAgreements: React.FC<Props> = ({ user }) => {
                 {userType === 'startup' && (
                   <TableCell>
                     <Link to={`/profile/${agreement.investor}`}>{agreement.investor}</Link>
-                    <CopyToClipboard
-                      text={agreement.investor}
-                      onCopy={() => toast.success('Copied to clipboard!')}
-                    >
-                      <FontAwesomeIcon
-                        style={{ marginLeft: '12px', cursor: 'pointer' }}
-                        icon='clipboard'
-                      />
-                    </CopyToClipboard>
+                    <SyTooltip title='copy address'>
+                      <CopyToClipboard
+                        text={agreement.investor}
+                        onCopy={() => toast.success('Copied to clipboard!')}
+                      >
+                        <FontAwesomeIcon
+                          style={{ marginLeft: '12px', cursor: 'pointer' }}
+                          icon='clipboard'
+                        />
+                      </CopyToClipboard>
+                    </SyTooltip>
                   </TableCell>
                 )}
                 {userType === 'investor' && (

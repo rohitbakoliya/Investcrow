@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
-import { Button, ButtonGroup, Flex, CircleIcon } from '@ico-ui';
+import { Button, ButtonGroup, Flex, CircleIcon, SyTooltip } from '@ico-ui';
 import { Textarea } from '@ico-ui/Form';
 
 import { StoreState } from 'store';
@@ -99,9 +99,13 @@ const Bio: React.FC<BioProps> = ({ user, currentUser }) => {
 
           {!isWPEditing &&
             (isCurrentUser ? (
-              <a href={`${currentUser.whitePaper}`} className='wp--link' target='__blank'>
-                {currentUser.whitePaper}
-              </a>
+              currentUser.whitePaper === 'No white Paper!' ? (
+                'No White Paper!'
+              ) : (
+                <a href={`${currentUser.whitePaper}`} className='wp--link' target='__blank'>
+                  {currentUser.whitePaper}
+                </a>
+              )
             ) : (
               <a href={`${user.whitePaper}`} className='wp--link' target='__blank'>
                 {user.whitePaper}
@@ -148,12 +152,14 @@ const Bio: React.FC<BioProps> = ({ user, currentUser }) => {
       <br />
       <span className='color--gray'>
         {user.address}
-        <CopyToClipboard
-          text={user.address ? user.address : ''}
-          onCopy={() => toast.success('Copied to clipboard!')}
-        >
-          <FontAwesomeIcon style={{ marginLeft: '12px', cursor: 'pointer' }} icon='clipboard' />
-        </CopyToClipboard>
+        <SyTooltip title='copy address'>
+          <CopyToClipboard
+            text={user.address ? user.address : ''}
+            onCopy={() => toast.success('Copied to clipboard!')}
+          >
+            <FontAwesomeIcon style={{ marginLeft: '12px', cursor: 'pointer' }} icon='clipboard' />
+          </CopyToClipboard>
+        </SyTooltip>
       </span>
       <p>
         <Textarea

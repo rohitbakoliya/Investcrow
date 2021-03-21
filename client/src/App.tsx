@@ -7,14 +7,17 @@ import '@ico-ui/config-ui/fontLib';
 import MainRouter from './routes/routes';
 import GlobalStyles from './styles/globalStyles';
 import { history, store } from 'store';
+import ErrorCatch from 'components/ErrorCatch';
 
 const App = () => (
   <StoreProvider store={store}>
     <ThemeProvider theme={theme}>
       <ConnectedRouter history={history}>
         <GlobalStyles />
-        <Toast />
-        <MainRouter />
+        <ErrorCatch>
+          <Toast />
+          <MainRouter />
+        </ErrorCatch>
       </ConnectedRouter>
     </ThemeProvider>
   </StoreProvider>

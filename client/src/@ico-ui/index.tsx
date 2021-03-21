@@ -8,3 +8,4 @@ export * from './DashboardHeader';
 export * from './Grid';
 export * from './config-ui/colorVariants';
 export * from './Toast';
+export * from './Tooltip';

@@ -1,4 +1,4 @@
-import { Flex, IconLink } from '@ico-ui';
+import { Flex, IconLink, SyTooltip } from '@ico-ui';
 import Avatar from '@ico-ui/Avatar';
 import Navbar from 'components/Navbar/Navbar';
 import React, { useEffect, useState } from 'react';
@@ -59,12 +59,14 @@ const Sidebar: React.FC = React.memo(() => {
               <p className='color--gray address--bar'>
                 Your Addreess
                 {/* {user?.address} */}
-                <CopyToClipboard
-                  text={user?.address ? user.address : ''}
-                  onCopy={() => toast.success('Copied to clipboard!')}
-                >
-                  <FontAwesomeIcon icon='clipboard' />
-                </CopyToClipboard>
+                <SyTooltip title='copy your address'>
+                  <CopyToClipboard
+                    text={user?.address ? user.address : ''}
+                    onCopy={() => toast.success('Copied to clipboard!')}
+                  >
+                    <FontAwesomeIcon icon='clipboard' />
+                  </CopyToClipboard>
+                </SyTooltip>
               </p>
             </div>
           </Flex>
