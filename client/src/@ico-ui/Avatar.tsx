@@ -34,7 +34,7 @@ const AvatarImage = styled.img<IAvatarImg>(p => ({
 
 const LoadingImage = styled.div<ILoading>`
   width: 100%;
-  max-width: 200px;
+  /* max-width: 200px; */
   min-height: 168px;
   display: ${p => (p.loader ? 'flex' : 'none')};
   justify-content: center;

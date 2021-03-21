@@ -4,9 +4,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Input } from '@ico-ui/Form';
 import { Button } from '@ico-ui';
-import web3 from 'config/web3';
 import MainContract from 'config/MainContract';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { StoreState } from 'store';
 
 const TokenSchema = yup.object().shape({
   tokenName: yup.string().required().trim(), //Bitcoin
@@ -40,16 +41,16 @@ interface Props {
 
 const CreateTokenForm: React.FC<Props> = ({ tokenCreated }) => {
   const [loading, setLoading] = useState(false);
+  const user = useSelector((state: StoreState) => state.auth.user);
   const { register, handleSubmit, errors } = useForm<Token>({
     mode: 'onChange',
     resolver: yupResolver(TokenSchema),
   });
 
   const createToken = async (token: Token) => {
-    const accounts = await web3.eth.getAccounts();
     try {
       await MainContract.methods.createToken(token.tokenName, token.symbol, token.noOfTokens).send({
-        from: accounts[0],
+        from: user?.address,
       });
     } catch (err) {
       console.log(err);
@@ -64,7 +65,7 @@ const CreateTokenForm: React.FC<Props> = ({ tokenCreated }) => {
   };
   return (
     <FormWrapper>
-      <h1 className='text--bold'>It seems your havn't created any token</h1>
+      <h1 className='text--bold'>It seems your havn't created any token yet</h1>
       <p>Please create a token first</p>
       <br />
       <form onSubmit={handleSubmit(onSubmit)}>

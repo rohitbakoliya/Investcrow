@@ -4,11 +4,12 @@ import * as yup from 'yup';
 import { Input } from '@ico-ui/Form';
 import { Button, Flex } from '@ico-ui';
 import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import MainContract from 'config/MainContract';
-import web3 from 'config/web3';
 import Loading from '@ico-ui/Loading';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { StoreState } from 'store';
 
 const AgreementSchema = yup.object().shape({
   investorAddress: yup.string().required().trim(),
@@ -22,7 +23,7 @@ interface Agreement {
   tokenPromised: number;
 }
 interface Props {
-  address: string;
+  address?: string;
   token: string;
 }
 
@@ -46,18 +47,16 @@ const LoadingWrapper = styled.div`
 const AgreementForm: React.FC<Props> = ({ address: companyAddress, token: tokenAddress }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const user = useSelector((state: StoreState) => state.auth.user);
   const handleClickOpen = () => {
     setOpen(true);
   };
-  console.log('Inside agg', companyAddress);
-  console.log('token', tokenAddress);
   const { register, handleSubmit, errors } = useForm<Agreement>({
     mode: 'onChange',
     resolver: yupResolver(AgreementSchema),
   });
   const onSubmit = async (data: Agreement) => {
     try {
-      const accounts = await web3.eth.getAccounts();
       setLoading(true);
       await MainContract.methods
         .makeAgreement(
@@ -67,7 +66,7 @@ const AgreementForm: React.FC<Props> = ({ address: companyAddress, token: tokenA
           data.tokenPromised,
           tokenAddress
         )
-        .send({ from: accounts[0] });
+        .send({ from: user?.address });
       const k = await MainContract.methods
         .getAgreement(data.investorAddress, companyAddress)
         .call();
