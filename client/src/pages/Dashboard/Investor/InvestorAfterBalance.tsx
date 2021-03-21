@@ -3,12 +3,15 @@ import web3 from 'config/web3';
 import React, { useEffect, useState } from 'react';
 import AllInvestorAgreements from 'components/InvestorAgreements/InvestorAgreements';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { StoreState } from 'store';
 interface Props {
   contractBalance: string;
   accountBalance: string;
 }
 
 const StyledIAB = styled.div`
+  width: 100%;
   .account__summary {
     display: flex;
     width: 100%;
@@ -20,11 +23,11 @@ const StyledIAB = styled.div`
 
 const InvestorAfterBalance: React.FC<Props> = ({ contractBalance, accountBalance }) => {
   const [agreements, setAggreements] = useState([]);
+  const user = useSelector((state: StoreState) => state.auth.user);
   useEffect(() => {
     const getAgreements = async () => {
       try {
-        const accounts = await web3.eth.getAccounts();
-        const _agreements = await MainContract.methods.getAgreements(accounts[0]).call();
+        const _agreements = await MainContract.methods.getAgreements(user?.address).call();
         setAggreements(_agreements);
         console.log(_agreements);
       } catch (err) {

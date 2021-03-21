@@ -12,8 +12,10 @@ import MainContract from 'config/MainContract';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '@ico-ui';
 import toast from 'react-hot-toast';
-import web3 from 'config/web3';
 import { Link } from 'react-router-dom';
+import CopyToClipboard from 'react-copy-to-clipboard';
+import { useSelector } from 'react-redux';
+import { StoreState } from 'store';
 
 interface Props {
   agreements: Array<any>;
@@ -24,13 +26,16 @@ interface SProps {
 const StatusComponet: React.FC<SProps> = ({ agreement }) => {
   const [loading, setLoading] = useState(true);
   const [statusIcon, setStatusIcon] = useState<null | JSX.Element>(null);
+  const user = useSelector((state: StoreState) => state.auth.user);
 
-  const transferToken = async (tokenAddress: string, value: number, account: string) => {
+  const transferToken = async (tokenAddress: string, value: number) => {
     try {
       await MainContract.methods.depositToken(tokenAddress, value).send({
-        from: account,
+        from: user?.address,
       });
-      const bal = await MainContract.methods.getDepositedTokenBalance(account, tokenAddress).call();
+      const bal = await MainContract.methods
+        .getDepositedTokenBalance(user?.address, tokenAddress)
+        .call();
       console.log(`paisa` + bal);
     } catch (err) {
       console.log(err);
@@ -38,11 +43,10 @@ const StatusComponet: React.FC<SProps> = ({ agreement }) => {
   };
   const completeAgreement = async () => {
     try {
-      const [account] = await web3.eth.getAccounts();
-      await transferToken(agreement.token, agreement.tokensRequired, account);
+      await transferToken(agreement.token, agreement.tokensRequired);
       await MainContract.methods
         .completeAgreement(agreement.investor, agreement.company)
-        .send({ from: account });
+        .send({ from: user?.address });
       setStatusIcon(null);
       toast.success(`Transection Completed`);
     } catch (err) {
@@ -109,6 +113,15 @@ const AllAgreements: React.FC<Props> = ({ agreements }) => {
               <TableRow key={Math.random()}>
                 <TableCell>
                   <Link to={`/profile/${agreement.investor}`}>{agreement.investor}</Link>
+                  <CopyToClipboard
+                    text={agreement.investor}
+                    onCopy={() => toast.success('Copied to clipboard!')}
+                  >
+                    <FontAwesomeIcon
+                      style={{ marginLeft: '12px', cursor: 'pointer' }}
+                      icon='clipboard'
+                    />
+                  </CopyToClipboard>
                 </TableCell>
                 <TableCell align='center'>{agreement.moneyRequired}</TableCell>
                 <TableCell align='center'>{agreement.tokensRequired}</TableCell>

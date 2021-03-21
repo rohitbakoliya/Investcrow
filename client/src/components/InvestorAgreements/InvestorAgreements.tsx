@@ -11,13 +11,14 @@ import {
 import MainContract from 'config/MainContract';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DoneIcon from '@material-ui/icons/Done';
-import { Button } from '@ico-ui';
 import toast from 'react-hot-toast';
 import web3 from 'config/web3';
-import FontAwesome from 'react-fontawesome';
 import styled from 'styled-components';
 import Loading from '@ico-ui/Loading';
 import { Link } from 'react-router-dom';
+import CopyToClipboard from 'react-copy-to-clipboard';
+import { useSelector } from 'react-redux';
+import { StoreState } from 'store';
 
 interface Props {
   agreements: Array<any>;
@@ -46,6 +47,7 @@ const StatusComponet: React.FC<SProps> = ({ agreement }) => {
   const [loading, setLoading] = useState(true);
   const [statusIcon, setStatusIcon] = useState<null | JSX.Element>(null);
   const [loading1, setLoading1] = useState(false);
+  const user = useSelector((state: StoreState) => state.auth.user);
 
   const transferMoney = async (agreement: any) => {
     try {
@@ -66,10 +68,9 @@ const StatusComponet: React.FC<SProps> = ({ agreement }) => {
   const handleApprove = async () => {
     try {
       setLoading1(true);
-      const [account] = await web3.eth.getAccounts();
       await MainContract.methods
         .approveAgreement(agreement.investor, agreement.company)
-        .send({ from: account });
+        .send({ from: user?.address });
       await transferMoney(agreement);
       setLoading1(false);
     } catch (err) {
@@ -81,10 +82,9 @@ const StatusComponet: React.FC<SProps> = ({ agreement }) => {
   const handleReject = async () => {
     try {
       setLoading1(true);
-      const [account] = await web3.eth.getAccounts();
       await MainContract.methods
         .rejectAgreement(agreement.investor, agreement.company)
-        .send({ from: account });
+        .send({ from: user?.address });
       setStatusIcon(null);
       setLoading1(false);
       toast.success(`Approval rejected`);
@@ -152,6 +152,9 @@ const StatusComponet: React.FC<SProps> = ({ agreement }) => {
 };
 
 const AllAgreements: React.FC<Props> = ({ agreements }) => {
+  if (agreements && agreements.length === 0) {
+    return <>No agreements made yet</>;
+  }
   return (
     <>
       <TableContainer component={Paper}>
@@ -169,6 +172,15 @@ const AllAgreements: React.FC<Props> = ({ agreements }) => {
               <TableRow key={Math.random()}>
                 <TableCell align='center'>
                   <Link to={`/profile/${agreement.company}`}>{agreement.company}</Link>
+                  <CopyToClipboard
+                    text={agreement.investor}
+                    onCopy={() => toast.success('Copied to clipboard!')}
+                  >
+                    <FontAwesomeIcon
+                      style={{ marginLeft: '12px', cursor: 'pointer' }}
+                      icon='clipboard'
+                    />
+                  </CopyToClipboard>
                 </TableCell>
                 <TableCell align='center'>{agreement.moneyRequired}</TableCell>
                 <TableCell align='center'>{agreement.tokensRequired}</TableCell>

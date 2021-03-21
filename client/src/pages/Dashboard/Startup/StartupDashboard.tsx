@@ -6,17 +6,19 @@ import CreateTokenForm from 'components/Forms/CreateToken';
 import { StartupDashboardWrapper } from './StartupDashboard.style';
 import toast from 'react-hot-toast';
 import StartupAfterToken from './StartupAfterToken';
+import { useSelector } from 'react-redux';
+import { StoreState } from 'store';
 
 const StartupDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState<null | string>(null);
   const [hasToken, setHasToken] = useState(false);
+  const user = useSelector((state: StoreState) => state.auth.user);
+
   useEffect(() => {
     const checkForTokens = async () => {
       try {
-        const accounts = await web3.eth.getAccounts();
-        console.log(`--------------------------------`, accounts);
-        const token = await MainContract.methods.getStartupToken(accounts[0]).call();
+        const token = await MainContract.methods.getStartupToken(user?.address).call();
         if (parseInt(token)) {
           setToken(token);
           setHasToken(true);
