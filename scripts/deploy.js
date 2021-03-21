@@ -6,7 +6,7 @@ dotenv.config({ path: '../.env' });
 const fs = require('fs-extra');
 const path = require('path');
 
-const addressPath = path.resolve(__dirname, 'client', 'src', 'ethutils');
+const addressPath = path.resolve(process.cwd(), 'client', 'src', 'ethutils');
 // fs.removeSync(addressPath);
 
 async function main() {
@@ -15,8 +15,8 @@ async function main() {
   const signer = web3.eth.accounts.privateKeyToAccount(process.env.SIGNER_PRIVATE_KEY);
   web3.eth.accounts.wallet.add(signer);
 
-  const abi = compiledMainContract['MainContract'].abi;
-  const bytecode = compiledMainContract['MainContract'].evm.bytecode.object;
+  const abi = compiledMainContract.MainContract.abi;
+  const bytecode = compiledMainContract.MainContract.evm.bytecode.object;
 
   const contract = new web3.eth.Contract(abi);
   contract.options.data = bytecode;

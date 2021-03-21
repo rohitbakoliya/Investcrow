@@ -24,6 +24,7 @@
     <li> 
       <a href="#technologies-we-used">Technologies we used</a>
     </li>
+    <li><a href="#installation">Installation</a></li>
     <li><a href="#workflow">Workflow</a></li>
     <li><a href="#authors">Authors</a></li>
   </ol>
@@ -43,7 +44,7 @@ investor and startup respectively.
 
 ### Technologies We Used
 
-- [MONGODB](https://www.mongodb.com/)
+- [MongoDB](https://www.mongodb.com/)
 - [Expressjs](https://expressjs.com/)
 - [Reactjs](https://reactjs.org/)
 - [Nodejs](https://nodejs.org/en/)
@@ -75,7 +76,7 @@ investor and startup respectively.
    ```
 5. This will start your project at `localhost:3000`
 
-Note: after updating solidity contracts, then you need to run `node compile.js` and `node deploy.js`
+Note: after updating solidity contracts, then you need to run `node scripts/compile.js` and `node scripts/deploy.js`
 
 <!-- USAGE EXAMPLES -->
 

@@ -2,7 +2,7 @@ const path = require('path');
 const solc = require('solc');
 const fs = require('fs-extra');
 
-const buildPath = path.resolve(__dirname, 'client', 'src', 'ethutils');
+const buildPath = path.resolve(process.cwd(), 'client', 'src', 'ethutils');
 fs.removeSync(buildPath);
 
 const contracts = [
@@ -16,11 +16,11 @@ const paths = [];
 const sources = [];
 
 contracts.forEach((contract, index) => {
-  paths.push(path.resolve(__dirname, 'contracts', contract));
+  paths.push(path.resolve(process.cwd(), 'contracts', contract));
   sources.push(fs.readFileSync(paths[index], 'utf8'));
 });
 
-var input = {
+const input = {
   language: 'Solidity',
   sources: {
     'MainContract.sol': {
@@ -56,12 +56,12 @@ function findImports(path) {
   else return { error: 'File not found' };
 }
 
-var output = JSON.parse(solc.compile(JSON.stringify(input), { import: findImports }));
+const output = JSON.parse(solc.compile(JSON.stringify(input), { import: findImports }));
 
 // console.log(output);
 
 fs.ensureDirSync(buildPath);
-for (contract in output.contracts) {
+for (const contract in output.contracts) {
   fs.outputJSONSync(
     path.resolve(buildPath, contract.replace('.sol', '') + '.json'),
     output.contracts[contract]
