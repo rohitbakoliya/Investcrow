@@ -102,14 +102,18 @@ const Bio: React.FC<BioProps> = ({ user, currentUser }) => {
               currentUser.whitePaper === 'No white Paper!' ? (
                 'No White Paper!'
               ) : (
-                <a href={`${currentUser.whitePaper}`} className='wp--link' target='__blank'>
-                  {currentUser.whitePaper}
-                </a>
+                <SyTooltip title='white paper'>
+                  <a href={`${currentUser.whitePaper}`} className='wp--link' target='__blank'>
+                    {currentUser.whitePaper}
+                  </a>
+                </SyTooltip>
               )
             ) : (
-              <a href={`${user.whitePaper}`} className='wp--link' target='__blank'>
-                {user.whitePaper}
-              </a>
+              <SyTooltip title='white paper'>
+                <a href={`${user.whitePaper}`} className='wp--link' target='__blank'>
+                  {user.whitePaper}
+                </a>
+              </SyTooltip>
             ))}
         </p>
         {isCurrentUser && (

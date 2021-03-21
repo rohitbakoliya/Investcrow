@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, Flex } from '@ico-ui';
+import { Avatar, Flex, SyTooltip } from '@ico-ui';
 import DashboardHeader from '@ico-ui/DashboardHeader';
 import Loading from '@ico-ui/Loading';
 import axios from 'axios';
@@ -61,12 +61,14 @@ const Profiles: React.FC = () => {
         <h3 className='text--bold mt-small'>{user.name}</h3>
         <span className='color--gray'>
           {user.address}
-          <CopyToClipboard
-            text={user.address ? user.address : ''}
-            onCopy={() => toast.success('Copied to clipboard!')}
-          >
-            <FontAwesomeIcon style={{ marginLeft: '12px', cursor: 'pointer' }} icon='clipboard' />
-          </CopyToClipboard>
+          <SyTooltip title='copy address'>
+            <CopyToClipboard
+              text={user.address ? user.address : ''}
+              onCopy={() => toast.success('Copied to clipboard!')}
+            >
+              <FontAwesomeIcon style={{ marginLeft: '12px', cursor: 'pointer' }} icon='clipboard' />
+            </CopyToClipboard>
+          </SyTooltip>
         </span>
       </Flex>
     ));

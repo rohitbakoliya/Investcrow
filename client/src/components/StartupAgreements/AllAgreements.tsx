@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 import MainContract from 'config/MainContract';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button } from '@ico-ui';
+import { Button, SyTooltip } from '@ico-ui';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import CopyToClipboard from 'react-copy-to-clipboard';
@@ -113,15 +113,17 @@ const AllAgreements: React.FC<Props> = ({ agreements }) => {
               <TableRow key={Math.random()}>
                 <TableCell>
                   <Link to={`/profile/${agreement.investor}`}>{agreement.investor}</Link>
-                  <CopyToClipboard
-                    text={agreement.investor}
-                    onCopy={() => toast.success('Copied to clipboard!')}
-                  >
-                    <FontAwesomeIcon
-                      style={{ marginLeft: '12px', cursor: 'pointer' }}
-                      icon='clipboard'
-                    />
-                  </CopyToClipboard>
+                  <SyTooltip title='copy address'>
+                    <CopyToClipboard
+                      text={agreement.investor}
+                      onCopy={() => toast.success('Copied to clipboard!')}
+                    >
+                      <FontAwesomeIcon
+                        style={{ marginLeft: '12px', cursor: 'pointer' }}
+                        icon='clipboard'
+                      />
+                    </CopyToClipboard>
+                  </SyTooltip>
                 </TableCell>
                 <TableCell align='center'>{agreement.moneyRequired}</TableCell>
                 <TableCell align='center'>{agreement.tokensRequired}</TableCell>

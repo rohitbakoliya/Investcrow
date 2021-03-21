@@ -136,15 +136,17 @@ const UserAgreements: React.FC<Props> = ({ user }) => {
                 {userType === 'investor' && (
                   <TableCell>
                     <Link to={`/profile/${agreement.company}`}>{agreement.company}</Link>
-                    <CopyToClipboard
-                      text={agreement.investor}
-                      onCopy={() => toast.success('Copied to clipboard!')}
-                    >
-                      <FontAwesomeIcon
-                        style={{ marginLeft: '12px', cursor: 'pointer' }}
-                        icon='clipboard'
-                      />
-                    </CopyToClipboard>
+                    <SyTooltip title='copy clipboard'>
+                      <CopyToClipboard
+                        text={agreement.investor}
+                        onCopy={() => toast.success('Copied to clipboard!')}
+                      >
+                        <FontAwesomeIcon
+                          style={{ marginLeft: '12px', cursor: 'pointer' }}
+                          icon='clipboard'
+                        />
+                      </CopyToClipboard>
+                    </SyTooltip>
                   </TableCell>
                 )}
                 <TableCell align='center'>{agreement.moneyRequired}</TableCell>

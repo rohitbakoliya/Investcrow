@@ -19,6 +19,7 @@ import { Link } from 'react-router-dom';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { useSelector } from 'react-redux';
 import { StoreState } from 'store';
+import { SyTooltip } from '@ico-ui';
 
 interface Props {
   agreements: Array<any>;
@@ -172,15 +173,17 @@ const AllAgreements: React.FC<Props> = ({ agreements }) => {
               <TableRow key={Math.random()}>
                 <TableCell align='center'>
                   <Link to={`/profile/${agreement.company}`}>{agreement.company}</Link>
-                  <CopyToClipboard
-                    text={agreement.investor}
-                    onCopy={() => toast.success('Copied to clipboard!')}
-                  >
-                    <FontAwesomeIcon
-                      style={{ marginLeft: '12px', cursor: 'pointer' }}
-                      icon='clipboard'
-                    />
-                  </CopyToClipboard>
+                  <SyTooltip title='copy address'>
+                    <CopyToClipboard
+                      text={agreement.investor}
+                      onCopy={() => toast.success('Copied to clipboard!')}
+                    >
+                      <FontAwesomeIcon
+                        style={{ marginLeft: '12px', cursor: 'pointer' }}
+                        icon='clipboard'
+                      />
+                    </CopyToClipboard>
+                  </SyTooltip>
                 </TableCell>
                 <TableCell align='center'>{agreement.moneyRequired}</TableCell>
                 <TableCell align='center'>{agreement.tokensRequired}</TableCell>
