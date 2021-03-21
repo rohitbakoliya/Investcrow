@@ -39,11 +39,9 @@ const StandOut = styled.p<{ prefix: any }>`
 
 interface UserInfoProps {
   user: any;
-  totalComments: string | number;
-  totalBugs: string | number;
 }
 
-const UserInfo: React.FC<UserInfoProps> = ({ user, totalComments, totalBugs }) => {
+const UserInfo: React.FC<UserInfoProps> = ({ user }) => {
   const dispatch = useDispatch<any>();
   const [file, setFile] = useState<File>();
   const [modalIsOpen, setIsOpen] = useState(false);

@@ -6,6 +6,8 @@ import { Textarea } from '@ico-ui/Form';
 
 import { StoreState } from 'store';
 import { updateUserBio, updateUserWP } from 'store/ducks/auth';
+import CopyToClipboard from 'react-copy-to-clipboard';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface BioProps {
   user: any;
@@ -51,6 +53,7 @@ const Bio: React.FC<BioProps> = ({ user, currentUser }) => {
     setWPEditing(false);
     dispatch(updateUserWP({ whitePaper: textareaRefWP.current.value }))
       .then(() => {
+        window.location.reload();
         toast.success('White Paper updated');
       })
       .catch((err: string) => {
@@ -93,7 +96,17 @@ const Bio: React.FC<BioProps> = ({ user, currentUser }) => {
           >
             {currentUser.whitePaper}
           </Textarea>
-          {!isWPEditing && (isCurrentUser ? currentUser.whitePaper : user.whitePaper)}
+
+          {!isWPEditing &&
+            (isCurrentUser ? (
+              <a href={`${currentUser.whitePaper}`} className='wp--link' target='__blank'>
+                {currentUser.whitePaper}
+              </a>
+            ) : (
+              <a href={`${user.whitePaper}`} className='wp--link' target='__blank'>
+                {user.whitePaper}
+              </a>
+            ))}
         </p>
         {isCurrentUser && (
           <ButtonGroup gap='medium'>
@@ -133,7 +146,15 @@ const Bio: React.FC<BioProps> = ({ user, currentUser }) => {
         ) : null}
       </Flex>
       <br />
-      <span className='color--gray'>{user.address}</span>
+      <span className='color--gray'>
+        {user.address}
+        <CopyToClipboard
+          text={user.address ? user.address : ''}
+          onCopy={() => toast.success('Copied to clipboard!')}
+        >
+          <FontAwesomeIcon style={{ marginLeft: '12px', cursor: 'pointer' }} icon='clipboard' />
+        </CopyToClipboard>
+      </span>
       <p>
         <Textarea
           rows={3}

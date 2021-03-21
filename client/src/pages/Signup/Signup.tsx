@@ -49,7 +49,7 @@ const Signup: React.FC = () => {
     if (!userTypeValue) return;
     dispatch(signupUser(formData))
       .then(() => {
-        toast.success(`Registed successfully! please verify your email`);
+        toast.success(`Registed successfully!`);
         history.push('/auth/portis');
       })
       .catch((e: string) => toast.error(e));

@@ -34,7 +34,7 @@ const Profile: React.FC = () => {
     }
     return (
       <>
-        <UserInfo user={user} totalComments={10} totalBugs={10} />
+        <UserInfo user={user} />
       </>
     );
   };
@@ -45,7 +45,7 @@ const Profile: React.FC = () => {
       <br />
       <br />
       <h2>User History</h2>
-      <UserAgreements />
+      <UserAgreements user={userData} />
     </>
   );
 };

@@ -1,8 +1,11 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, Flex } from '@ico-ui';
 import DashboardHeader from '@ico-ui/DashboardHeader';
 import Loading from '@ico-ui/Loading';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import CopyToClipboard from 'react-copy-to-clipboard';
+import toast from 'react-hot-toast';
 import styled from 'styled-components';
 
 const StyledProfiles = styled.div`
@@ -48,7 +51,7 @@ const Profiles: React.FC = () => {
       <Flex key={user.id} align='center' direction='column'>
         <Avatar
           address={user.address}
-          showVerification
+          showVerification={user.userType[0] === 'startup' ? true : false}
           isVerified={user.isVerified}
           width='130'
           height='130'
@@ -56,7 +59,15 @@ const Profiles: React.FC = () => {
           id={user.id}
         />
         <h3 className='text--bold mt-small'>{user.name}</h3>
-        <span className='color--gray'>{user.address}</span>
+        <span className='color--gray'>
+          {user.address}
+          <CopyToClipboard
+            text={user.address ? user.address : ''}
+            onCopy={() => toast.success('Copied to clipboard!')}
+          >
+            <FontAwesomeIcon style={{ marginLeft: '12px', cursor: 'pointer' }} icon='clipboard' />
+          </CopyToClipboard>
+        </span>
       </Flex>
     ));
   };

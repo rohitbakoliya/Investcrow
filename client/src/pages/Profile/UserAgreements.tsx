@@ -11,17 +11,15 @@ import {
 import MainContract from 'config/MainContract';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DoneIcon from '@material-ui/icons/Done';
-import { Button } from '@ico-ui';
 import toast from 'react-hot-toast';
-import web3 from 'config/web3';
-import FontAwesome from 'react-fontawesome';
 import styled from 'styled-components';
 import Loading from '@ico-ui/Loading';
-import { useSelector } from 'react-redux';
-import { StoreState } from 'store';
 import { Link } from 'react-router-dom';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
-interface Props {}
+interface Props {
+  user: any;
+}
 interface SProps {
   agreement: any;
 }
@@ -70,30 +68,37 @@ const StatusComponet: React.FC<SProps> = ({ agreement }) => {
   return statusIcon;
 };
 
-const UserAgreements: React.FC<Props> = () => {
+const UserAgreements: React.FC<Props> = ({ user }) => {
   const [agreements, setAgreements] = useState<Array<any>>([]);
-  const userVal = useSelector((state: StoreState) => state.auth.user?.userType);
   const [loading, setLoading] = useState(true);
-  let userType = 'startup';
-  if (userVal !== undefined) userType = userVal[0];
+
+  let userType: string | undefined = undefined;
+  if (user instanceof Object && Object.keys(user).length !== 0) {
+    userType = user.userType[0];
+  }
+
   useEffect(() => {
     const getAgreements = async () => {
-      const [account] = await web3.eth.getAccounts();
-      console.log(account);
-      const agreement = await MainContract.methods.getAgreements(account).call();
-      setAgreements(agreement);
-      console.log(agreement);
-      setLoading(false);
+      if (user instanceof Object && Object.keys(user).length !== 0) {
+        const account = user.address;
+        const agreement = await MainContract.methods.getAgreements(account).call();
+        setAgreements(agreement);
+        setLoading(false);
+      }
     };
     getAgreements();
-  }, []);
-  if (loading) {
+  }, [user]);
+
+  if (loading || !user) {
     return (
       <UserWrapper>
         <p>Fetching your History</p>
         <Loading varient='secondary' />
       </UserWrapper>
     );
+  }
+  if (agreements.length === 0) {
+    return <>No agreements made yet</>;
   }
   return (
     <>
@@ -114,11 +119,29 @@ const UserAgreements: React.FC<Props> = () => {
                 {userType === 'startup' && (
                   <TableCell>
                     <Link to={`/profile/${agreement.investor}`}>{agreement.investor}</Link>
+                    <CopyToClipboard
+                      text={agreement.investor}
+                      onCopy={() => toast.success('Copied to clipboard!')}
+                    >
+                      <FontAwesomeIcon
+                        style={{ marginLeft: '12px', cursor: 'pointer' }}
+                        icon='clipboard'
+                      />
+                    </CopyToClipboard>
                   </TableCell>
                 )}
                 {userType === 'investor' && (
                   <TableCell>
                     <Link to={`/profile/${agreement.company}`}>{agreement.company}</Link>
+                    <CopyToClipboard
+                      text={agreement.investor}
+                      onCopy={() => toast.success('Copied to clipboard!')}
+                    >
+                      <FontAwesomeIcon
+                        style={{ marginLeft: '12px', cursor: 'pointer' }}
+                        icon='clipboard'
+                      />
+                    </CopyToClipboard>
                   </TableCell>
                 )}
                 <TableCell align='center'>{agreement.moneyRequired}</TableCell>

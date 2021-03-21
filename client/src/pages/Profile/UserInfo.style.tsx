@@ -28,6 +28,10 @@ export const UserMetaInfo = styled.div`
     pointer-events: none;
     position: absolute;
   }
+  .wp--link {
+    color: ${p => p.theme.colors.secondary};
+    text-decoration: underline !important;
+  }
   @media screen and (${p => p.theme.media.desktop}) {
     width: 80%;
     padding-right: 0px;
