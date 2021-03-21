@@ -11,12 +11,11 @@ import {
 import MainContract from 'config/MainContract';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DoneIcon from '@material-ui/icons/Done';
-import { Button } from '@ico-ui';
 import toast from 'react-hot-toast';
-import web3 from 'config/web3';
-import FontAwesome from 'react-fontawesome';
 import styled from 'styled-components';
 import Loading from '@ico-ui/Loading';
+import { useSelector } from 'react-redux';
+import { StoreState } from 'store';
 
 interface Props {}
 interface SProps {
@@ -70,13 +69,11 @@ const StatusComponet: React.FC<SProps> = ({ agreement }) => {
 const UserAgreements: React.FC<Props> = () => {
   const [agreements, setAgreements] = useState<Array<any>>([]);
   const [loading, setLoading] = useState(true);
+  const user = useSelector((state: StoreState) => state.auth.user);
   useEffect(() => {
     const getAgreements = async () => {
-      const [account] = await web3.eth.getAccounts();
-      console.log(account);
-      const agreement = await MainContract.methods.getAgreements(account).call();
+      const agreement = await MainContract.methods.getAgreements(user?.address).call();
       setAgreements(agreement);
-      console.log(agreement);
       setLoading(false);
     };
     getAgreements();

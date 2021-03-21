@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import MainContract from 'config/MainContract';
 import AgreementForm from 'components/Forms/Agreement';
-import web3 from 'config/web3';
 import AllAgreements from 'components/StartupAgreements/AllAgreements';
 import styled from 'styled-components';
 import { Flex } from '@ico-ui';
 import toast from 'react-hot-toast';
+import { useSelector } from 'react-redux';
+import { StoreState } from 'store';
 
 interface Props {
   token: string;
 }
 
 const StyledSAD = styled.div`
+  width: 100%;
   .account__details {
     p {
       margin: 0;
@@ -26,15 +28,16 @@ const StyledSAD = styled.div`
 const StartupAfterToken: React.FC<Props> = ({ token }) => {
   const [tokenInfo, setTokenInfo] = useState([]);
   const [agreements, setAgreements] = useState([]);
-  const [address, setAddress] = useState<string>('');
+  const [address, setAddress] = useState<string | undefined>('');
+  const user = useSelector((state: StoreState) => state.auth.user);
+
   useEffect(() => {
     const getInfo = async () => {
       try {
-        const accounts = await web3.eth.getAccounts();
-        console.log(' This is address', accounts[0]);
-        setAddress(accounts[0]);
+        // console.log(' This is address', accounts[0]);
+        setAddress(user?.address);
         const info = await MainContract.methods.infoToken(token).call();
-        const _agreements = await MainContract.methods.getAgreements(accounts[0]).call();
+        const _agreements = await MainContract.methods.getAgreements(user?.address).call();
         setAgreements(_agreements);
         setTokenInfo(info);
       } catch (err) {
@@ -46,8 +49,7 @@ const StartupAfterToken: React.FC<Props> = ({ token }) => {
   useEffect(() => {
     const getAddress = async () => {
       try {
-        const accounts = await web3.eth.getAccounts();
-        setAddress(accounts[0]);
+        setAddress(user?.address);
       } catch (err) {
         toast.error('Something went wrong while creating new token');
       }
